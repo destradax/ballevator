@@ -1,3 +1,4 @@
+package gameobjects;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 

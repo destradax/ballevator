@@ -1,13 +1,15 @@
 package client;
 
-import gameobjects.Platform;
-import gameobjects.Scene;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+
+import scene.Ball;
+import scene.Platform;
+import scene.Scene;
 
 
 public class Client extends BasicGame{
@@ -17,7 +19,8 @@ public class Client extends BasicGame{
 	private InputListener inputListener;
 	
 	private Scene scene;
-	private Platform platform; 
+	private Platform platform;
+	private Ball ball;
 	
 	public Client(String title) {
 		super(title);
@@ -25,11 +28,13 @@ public class Client extends BasicGame{
 		inputListener = new InputListener(messages);
 		scene = new Scene();
 		platform = scene.getPlatform();
+		ball = scene.getBall();
 	}
 
 	@Override
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		platform.render(g);
+		ball.render(g);
 	}
 
 	@Override
@@ -45,12 +50,13 @@ public class Client extends BasicGame{
 		}
 		
 		platform.move();
+		ball.move();
 		if (quit) container.exit();
 	}
 	
 	private void processMessage(String message){
 		System.out.println("Process: " + message);
-		if (message.equals("q")) quit = true;
+		if (message.equals("q") || message == null) quit = true;
 		if (message.equals("lu")){
 			platform.leftUp();
 			return;
@@ -81,7 +87,7 @@ public class Client extends BasicGame{
     	try {
     		Client client = new Client("Client");
             AppGameContainer app = new AppGameContainer(client);
-            app.setDisplayMode(400, 400, false);
+            app.setDisplayMode(100, 100, false);
             app.setTargetFrameRate(60);
             app.start();
         } catch (SlickException e) {

@@ -1,6 +1,3 @@
-import gameobjects.Ball;
-import gameobjects.Obstacle;
-import gameobjects.Platform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +9,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.AppGameContainer;
+
+import scene.Ball;
+import scene.Obstacle;
+import scene.Platform;
 
 public class Main extends BasicGame{
 	
@@ -55,7 +56,7 @@ public class Main extends BasicGame{
 		input.removeAllListeners();
 		obstacles = new ArrayList<Obstacle>();
 //		platform = new Platform(100, 600, 300, 600);
-		ball = new Ball(WIDTH/2, platform.getY()-BALL_RADIUS, BALL_RADIUS);
+//		ball = new Ball(WIDTH/2, platform.getY()-BALL_RADIUS, BALL_RADIUS);
 		score = 10000;
 		state = IN_GAME;
 		for (int i = 0; i < 10; i++) {
@@ -68,7 +69,7 @@ public class Main extends BasicGame{
     public void init(GameContainer container) throws SlickException {
 		obstacles = new ArrayList<Obstacle>();
 //		platform = new Platform(100, 600, 300, 600);
-		ball = new Ball(WIDTH/2, platform.getY()-BALL_RADIUS, BALL_RADIUS);
+//		ball = new Ball(WIDTH/2, platform.getY()-BALL_RADIUS, BALL_RADIUS);
 		score = 10000;
 		state = IN_GAME;
 		for (int i = 0; i < 10; i++) {
@@ -84,15 +85,15 @@ public class Main extends BasicGame{
     public void update(GameContainer container, int delta)
             throws SlickException {
     	if (state == IN_GAME){
-	    	platform.move();
-	    	ball.move(platform);
-	    	if (ball.getCenterY() <= ball.radius) state = DONE;
-	    	if (ball.getState() == Ball.DEAD) state = GAME_OVER;
+//	    	platform.move();
+//	    	ball.move(platform);
+//	    	if (ball.getCenterY() <= ball.radius) state = DONE;
+//	    	if (ball.getState() == Ball.DEAD) state = GAME_OVER;
 	    	for (Obstacle o : obstacles) {
 				o.move();
-				if (o.intersects(ball)){
-					state = GAME_OVER;
-				}
+//				if (o.intersects(ball)){
+//					state = GAME_OVER;
+//				}
 			}
 	        score -= 1;
     	}
@@ -106,8 +107,8 @@ public class Main extends BasicGame{
     @Override
     public void render(GameContainer container, Graphics g)
             throws SlickException {
-		platform.render(g);
-		ball.render(g);
+//		platform.render(g);
+//		ball.render(g);
 		for (Obstacle o : obstacles) {
 			o.render(g);
 		}

@@ -12,7 +12,9 @@ public class Server {
 	private int port;
 	
 	private Socket client1 = null;
+	private Socket client2 = null;
 	private PrintWriter out1 = null;
+	private PrintWriter out2 = null;
 	
 	public Server(int port){
 		this.port = port;
@@ -42,14 +44,32 @@ public class Server {
             System.exit(3);
         }
         
+        System.out.println("Waiting for client 2...");
+        try {
+        	client2 = serverSocket.accept();
+        	out2 = new PrintWriter(client2.getOutputStream(), true);
+        } catch (IOException e) {
+        	System.err.println("Coud not get output strem for client 1");
+        	terminateServer();
+        	System.exit(2);
+		} catch (Exception e) {
+            System.err.println("Could not accept client2");
+            terminateServer();
+            System.exit(3);
+        }
+        
         new DataReceiver(this, client1).start();
-        out1.println("r");
+        new DataReceiver(this, client2).start();
+        out1.println("l");
+        out2.println("r");
         out1.println("s");
+        out2.println("s");
 	}
 
 	public void processMessage(String message){
 		System.out.println("Broadcasting message to all clients: " + message);
 		out1.println(message);
+		out2.println(message);
 		if (message.equals("q")){
 			terminateServer();
 		}

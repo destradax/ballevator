@@ -77,12 +77,9 @@ public class InputListener implements KeyListener{
 	public void keyReleased(int key, char c) {
 		switch(key){
 		case Input.KEY_UP:
-			processMessage(clientId+"ru");
-			sendMessage("ru");
-			break;
 		case Input.KEY_DOWN:
-			processMessage(clientId+"rd");
-			sendMessage("rd");
+			processMessage(clientId+"s");
+			sendMessage("s");
 			break;
 		}
 	}
@@ -105,5 +102,4 @@ public class InputListener implements KeyListener{
 		System.out.println("CLIentID:" + clientId);
 		this.clientId = clientId;
 	}
-	
 }

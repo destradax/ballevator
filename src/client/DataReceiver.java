@@ -19,7 +19,6 @@ public class DataReceiver extends Thread {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String inputLine;
             inputListener.setClientId(in.readLine());
-//            System.out.println("Listening...");
             while ((inputLine = in.readLine()) != null) {
                 inputListener.filterMessage(inputLine);
                 if (inputLine.equals("q")) {

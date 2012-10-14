@@ -23,12 +23,6 @@ public class Ball extends Circle{
 		state = IN_GAME;
 	}
 
-	public Ball(float centerPointX, float centerPointY, float radius) {
-		super(centerPointX, centerPointY, radius);
-		speed = 0f;
-		state = IN_GAME;
-	}
-	
 	public void move(){
 		if (state == IN_GAME){
 			x1 = platform.getX1(); y1 = platform.getY1();

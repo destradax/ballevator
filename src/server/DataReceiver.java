@@ -23,15 +23,13 @@ public class DataReceiver extends Thread {
             do{
             	inputLine = in.readLine();
             	server.processMessage(inputLine);
-            	if (inputLine.equals("q")) {
+            	if (inputLine == null || inputLine.equals("q")) {
             		break;
             	}
-            }while (inputLine != null);
-            	
+            }while (true);
 
             System.out.println("Closing DataServer");
             in.close();
-            socket.close();
         } catch (IOException e) {
             System.out.println("Connection Reset by client");
         }

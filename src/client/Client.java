@@ -1,15 +1,16 @@
 package client;
 
+import java.util.ArrayList;
+import java.util.List;
 
-import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 import scene.Ball;
+import scene.Obstacle;
 import scene.Platform;
-import scene.Scene;
 
 
 public class Client extends BasicGame{
@@ -18,17 +19,29 @@ public class Client extends BasicGame{
 	private boolean quit = false;
 	private InputListener inputListener;
 	
-	private Scene scene;
 	private Platform platform;
 	private Ball ball;
+	private List<Obstacle> obstacles;
 	
-	public Client(String title) {
-		super(title);
-		messages = new MessageQueue();
-		inputListener = new InputListener(messages);
-		scene = new Scene();
-		platform = scene.getPlatform();
-		ball = scene.getBall();
+	private int windowWidth, windowHeight;
+	private float platformSpeedL, platformSpeedR;
+	
+	public Client(InputListener inputListener, MessageQueue messages, 
+			int windowWidth, int windowHeight, float platformSpeedL, float platformSpeedR) {
+		super("Ballevator");
+		this.inputListener = inputListener;
+		this.messages = messages;
+		this.windowWidth = windowWidth;
+		this.windowHeight = windowHeight;
+		this.platformSpeedL = platformSpeedL;
+		this.platformSpeedR = platformSpeedR;
+		resetGame();
+	}
+	
+	private void resetGame(){
+		platform = new Platform(windowWidth, windowHeight, platformSpeedL, platformSpeedR);
+		ball = new Ball(platform);
+		obstacles = new ArrayList<Obstacle>();
 	}
 
 	@Override
@@ -40,7 +53,6 @@ public class Client extends BasicGame{
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		container.getInput().addKeyListener(inputListener);
-		while(messages.isEmpty());
 	}
 
 	@Override
@@ -51,12 +63,18 @@ public class Client extends BasicGame{
 		
 		platform.move();
 		ball.move();
+		for (Obstacle o : obstacles) {
+			o.move();
+		}
 		if (quit) container.exit();
 	}
 	
 	private void processMessage(String message){
 		System.out.println("Process: " + message);
-		if (message.equals("q") || message == null) quit = true;
+		if (message.matches(".*q") || message == null){
+			quit = true;
+			return;
+		}
 		if (message.equals("lu")){
 			platform.leftUp();
 			return;
@@ -65,7 +83,7 @@ public class Client extends BasicGame{
 			platform.leftDown();
 			return;
 		}
-		if (message.equals("lru") || message.equals("lrd")){
+		if (message.equals("ls")){
 			platform.leftStop();
 			return;
 		}
@@ -77,21 +95,9 @@ public class Client extends BasicGame{
 			platform.rightDown();
 			return;
 		}
-		if (message.equals("rru") || message.equals("rrd")){
+		if (message.equals("rs")){
 			platform.rightStop();
 			return;
 		}
 	}
-	
-	public static void main(String[] args) {
-    	try {
-    		Client client = new Client("Client");
-            AppGameContainer app = new AppGameContainer(client);
-            app.setDisplayMode(100, 100, false);
-            app.setTargetFrameRate(60);
-            app.start();
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
-    }
 }

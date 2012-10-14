@@ -9,23 +9,20 @@ public class Platform extends Line{
 	private float speedr;
 	private float leftSpeed;
 	private float rightSpeed;
+	private int windowWidth;
+	private int windowHeight;
 
-//	public Platform(float x1, float y1, float x2, float y2) {
-//		super(x1, y1, x2, y2);
-//		speed = 2.0f;
-//		
-//	}
-	
-	public Platform(float x1, float y1, float x2, float y2, float speedl, float speedr) {
-		super(x1, y1, x2, y2);
+	public Platform(int width, int height, float speedl, float speedr){
+		super(width/10.0f, height*0.9f, width*0.9f, height*0.9f);
+		this.windowHeight = height;
+		this.windowWidth = width;
 		this.speedl = speedl;
 		this.speedr = speedr;
-		leftSpeed = 0f;
-		rightSpeed = 0f;
 	}
 	
 	
 	public void move(){
+		//TODO add respect window boundaries when movind platform
 		set(getX1(), getY1() + leftSpeed, getX2(), getY2() + rightSpeed);
 	}
 	

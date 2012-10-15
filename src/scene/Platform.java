@@ -22,7 +22,10 @@ public class Platform extends Line{
 	
 	
 	public void move(){
-		//TODO respect window boundaries when moving platform
+		if (leftSpeed > 0f && (getY1() + leftSpeed) > windowHeight) leftSpeed = 0f;
+		if (leftSpeed < 0f && (getY1() + leftSpeed) < 0) leftSpeed = 0f;
+		if (rightSpeed > 0f && (getY2() + rightSpeed) > windowHeight) rightSpeed = 0f;
+		if (rightSpeed < 0f && (getY2() + rightSpeed) < 0) rightSpeed = 0f;
 		set(getX1(), getY1() + leftSpeed, getX2(), getY2() + rightSpeed);
 	}
 	

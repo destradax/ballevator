@@ -1,5 +1,6 @@
 package client;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -17,8 +18,8 @@ public class InputListener implements KeyListener{
 	private int port = 4444;
 	private DataReceiver dataReceiver;
 	private String clientId = null;
+	private boolean acceptingInput;
 
-	//TODO add a 'quit' method to close socket and associated resources
 	public InputListener(MessageQueue messages){
 		this.messages = messages;
 		
@@ -36,6 +37,7 @@ public class InputListener implements KeyListener{
 		
 		dataReceiver = new DataReceiver(this, socket);
 		dataReceiver.start();
+		acceptingInput = true;
 	}
 	
 	@Override
@@ -48,7 +50,7 @@ public class InputListener implements KeyListener{
 
 	@Override
 	public boolean isAcceptingInput() {
-		return true;
+		return acceptingInput;
 	}
 
 	@Override
@@ -104,5 +106,15 @@ public class InputListener implements KeyListener{
 	public void setClientId(String clientId) {
 		System.out.println("CLIentID:" + clientId);
 		this.clientId = clientId;
+	}
+	
+	public void close(){
+		acceptingInput = false;
+		out.close();
+		try {
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

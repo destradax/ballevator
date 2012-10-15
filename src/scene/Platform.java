@@ -13,7 +13,7 @@ public class Platform extends Line{
 	private int windowHeight;
 
 	public Platform(int width, int height, float speedl, float speedr){
-		super(width/10.0f, height*0.9f, width*0.9f, height*0.9f);
+		super(width*0.2f, height*0.9f, width*0.8f, height*0.9f);
 		this.windowHeight = height;
 		this.windowWidth = width;
 		this.speedl = speedl;

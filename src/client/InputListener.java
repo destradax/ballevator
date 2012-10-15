@@ -18,7 +18,7 @@ public class InputListener implements KeyListener{
 	private DataReceiver dataReceiver;
 	private String clientId = null;
 
-	
+	//TODO add a 'quit' method to close socket and associated resources
 	public InputListener(MessageQueue messages){
 		this.messages = messages;
 		
@@ -70,6 +70,9 @@ public class InputListener implements KeyListener{
 			processMessage("q");
 			sendMessage("q");
 			break;
+		case Input.KEY_F2:
+			processMessage("reset");
+			sendMessage("reset");
 		}
 	}
 
@@ -95,6 +98,7 @@ public class InputListener implements KeyListener{
 	}
 	
 	public void sendMessage(String message){
+		//TODO client ID should not be prepended here
 		out.println(clientId+message);
 	}
 

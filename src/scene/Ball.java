@@ -12,7 +12,6 @@ public class Ball extends Circle{
 	public static final int DEAD = -1;
 	private Platform platform;
 	private float speed;
-	private float x1, x2, y1, y2;
 	private int state;
 	
 	public Ball(Platform platform){
@@ -25,11 +24,13 @@ public class Ball extends Circle{
 
 	public void move(){
 		if (state == IN_GAME){
+			float x1, x2, y1, y2;
 			x1 = platform.getX1(); y1 = platform.getY1();
 			x2 = platform.getX2(); y2 = platform.getY2();
 			speed = (y1-y2) / 20;
 			
 			setCenterX(getCenterX() - speed);
+			//TODO add offset before ball starts falling
 			if (getCenterX() < x1 || getCenterX() > x2){
 				state = FREE_FALL;
 				speed = Math.abs(speed);
@@ -48,6 +49,7 @@ public class Ball extends Circle{
 	}
 	
 	public void die(){
+		//TODO check if this state is really needed by the game
 		state = DEAD;
 	}
 

@@ -19,7 +19,6 @@ public class DataReceiver extends Thread {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String inputLine;
             System.out.println("Listening...");
-            // While the client is connected
             do{
             	inputLine = in.readLine();
             	server.processMessage(inputLine);

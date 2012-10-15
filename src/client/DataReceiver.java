@@ -26,9 +26,10 @@ public class DataReceiver extends Thread {
                 }
             }
             in.close();
-            socket.close();
+            socket.close(); //TODO socket should be closed by InputListener
         } catch (IOException e) {
             System.out.println("Connection Reset by client");
+            //TODO check if 'in' resource is closed. if not, close it
         }
 	}
 }

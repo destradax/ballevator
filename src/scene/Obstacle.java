@@ -10,9 +10,6 @@ public class Obstacle extends Rectangle{
 	private int windowWidth;
 	private int windowHeight;
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public Obstacle(float x, float y, float width, float height,
@@ -25,6 +22,7 @@ public class Obstacle extends Rectangle{
 	}
 	
 	public void move(){
+		//TODO obstacle should not appear on the other side before the whole rectangle is off the screen 
 		x = (x + speedX) % windowWidth;
 		if (x < 0) x+= windowWidth;
 		y = (y + speedY) % windowHeight;

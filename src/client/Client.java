@@ -26,6 +26,8 @@ public class Client extends BasicGame{
 	private int windowWidth, windowHeight;
 	private float platformSpeedL, platformSpeedR;
 	
+	private int score;
+	
 	public Client(InputListener inputListener, MessageQueue messages, 
 			int windowWidth, int windowHeight, float platformSpeedL, float platformSpeedR) {
 		super("Ballevator");
@@ -36,6 +38,7 @@ public class Client extends BasicGame{
 		this.platformSpeedL = platformSpeedL;
 		this.platformSpeedR = platformSpeedR;
 		resetGame();
+		score = 10000;
 	}
 	
 	private void resetGame(){
@@ -48,11 +51,14 @@ public class Client extends BasicGame{
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		platform.render(g);
 		ball.render(g);
+		//TODO draw obstacles
+		g.drawString("Score: " + score, 10f, 20f);
 	}
 
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		container.getInput().addKeyListener(inputListener);
+		//TODO client should not start until signal is given from server
 	}
 
 	@Override
@@ -63,8 +69,10 @@ public class Client extends BasicGame{
 		
 		platform.move();
 		ball.move();
+		//TODO check ball state and set game state accordingly
 		for (Obstacle o : obstacles) {
 			o.move();
+			//TODO check if any obstacle intersects with the ball 
 		}
 		if (quit) container.exit();
 	}
@@ -99,5 +107,10 @@ public class Client extends BasicGame{
 			platform.rightStop();
 			return;
 		}
+		if (message.matches(".*reset")){
+			resetGame();
+			return;
+		}
+		System.err.println("Can't understand message: " + message);
 	}
 }

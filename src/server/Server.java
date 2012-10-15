@@ -20,6 +20,7 @@ public class Server {
 	private PrintWriter out2 = null;
 	
 	public Server(int width, int height, int framerate, float speedL, float speedR){
+		//TODO for testing purposes, add a parameter to specify the number of players
 		this.port = 4444;
 		this.width = width;
 		this.height = height;
@@ -98,6 +99,8 @@ public class Server {
 		try{
 			out1.close();
 			client1.close();
+			out2.close();
+			client2.close();
 			serverSocket.close();
 		}catch (Exception e){
 			System.err.println("Error closing server: ");
@@ -118,6 +121,9 @@ public class Server {
 		int framerate = Integer.parseInt(args[2]);
 		float speedL = Float.parseFloat(args[3]);
 		float speedR = Float.parseFloat(args[4]);
+		
+		//TODO check what is the minimum window size required to display everything properly
+		//TODO validate that window dimensions are greater than the minimum
 		
 		System.out.println("Window Width: " + width);
 		System.out.println("Platform Height: " + height);

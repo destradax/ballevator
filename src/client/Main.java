@@ -1,9 +1,7 @@
+package client;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
-import client.Client;
-import client.InputListener;
-import client.MessageQueue;
 
 
 public class Main {

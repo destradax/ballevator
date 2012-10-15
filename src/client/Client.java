@@ -51,7 +51,9 @@ public class Client extends BasicGame{
 	public void render(GameContainer container, Graphics g) throws SlickException {
 		platform.render(g);
 		ball.render(g);
-		//TODO draw obstacles
+		for (Obstacle o : obstacles){
+			o.render(g);
+		}
 		g.drawString("Score: " + score, 10f, 20f);
 	}
 
@@ -72,7 +74,9 @@ public class Client extends BasicGame{
 		//TODO check ball state and set game state accordingly
 		for (Obstacle o : obstacles) {
 			o.move();
-			//TODO check if any obstacle intersects with the ball 
+			if (o.intersects(ball)){
+				//TODO set game state to GAME OVER
+			}
 		}
 		if (quit) container.exit();
 	}

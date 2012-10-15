@@ -19,14 +19,16 @@ public class Server {
 	private PrintWriter out1 = null;
 	private PrintWriter out2 = null;
 	
-	public Server(int width, int height, int framerate, float speedL, float speedR){
-		//TODO for testing purposes, add a parameter to specify the number of players
+	private boolean multiplayer;
+	
+	public Server(int width, int height, int framerate, float speedL, float speedR, int players){
 		this.port = 4444;
 		this.width = width;
 		this.height = height;
 		this.framerate = framerate;
 		this.speedL = speedL;
 		this.speedR = speedR;
+		this.multiplayer = players == 2 ? true : false;
 		initNetwork();
 	}
 
@@ -52,7 +54,7 @@ public class Server {
             terminateServer();
             System.exit(3);
         }
-        
+        if (multiplayer){
         System.out.println("Waiting for client 2...");
         try {
         	client2 = serverSocket.accept();
@@ -66,11 +68,13 @@ public class Server {
             terminateServer();
             System.exit(3);
         }
-        
+        }
         new DataReceiver(this, client1).start();
-        new DataReceiver(this, client2).start();
         out1.println("l");
+        if (multiplayer){
+        new DataReceiver(this, client2).start();
         out2.println("r");
+        }
         
         out1.println(width);
         out1.println(height);
@@ -78,17 +82,19 @@ public class Server {
         out1.println(speedL);
         out1.println(speedR);
         
+        if (multiplayer){
         out2.println(width);
         out2.println(height);
         out2.println(framerate);
         out2.println(speedL);
         out2.println(speedR);
+        }
 	}
 
 	public void processMessage(String message){
 		System.out.println("Broadcasting message to all clients: " + message);
 		out1.println(message);
-		out2.println(message);
+		if(multiplayer){out2.println(message);}
 		if (message == null || message.equals("q")){
 			terminateServer();
 		}
@@ -99,8 +105,10 @@ public class Server {
 		try{
 			out1.close();
 			client1.close();
+			if(multiplayer){ 
 			out2.close();
 			client2.close();
+			}
 			serverSocket.close();
 		}catch (Exception e){
 			System.err.println("Error closing server: ");
@@ -111,8 +119,8 @@ public class Server {
 	
 	public static void main(String [] args){
 		
-		if (args.length != 5){
-			System.out.println("Please specify arguments: width, height, framerate, speedL, speedR");
+		if (args.length != 6){
+			System.out.println("Please specify arguments: width, height, framerate, speedL, speedR players");
 			System.exit(1);
 		}
 		
@@ -121,6 +129,7 @@ public class Server {
 		int framerate = Integer.parseInt(args[2]);
 		float speedL = Float.parseFloat(args[3]);
 		float speedR = Float.parseFloat(args[4]);
+		int players = Integer.parseInt(args[5]);
 		
 		//TODO check what is the minimum window size required to display everything properly
 		//TODO validate that window dimensions are greater than the minimum
@@ -131,6 +140,6 @@ public class Server {
 		System.out.println("SpeedL: " + speedL);
 		System.out.println("SpeedR: " + speedR);
 		
-		new Server(width, height, framerate, speedL, speedR);
+		new Server(width, height, framerate, speedL, speedR, players);
 	}
 }

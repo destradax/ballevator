@@ -60,19 +60,19 @@ public class InputListener implements KeyListener{
 		switch(key){
 		case Input.KEY_UP:
 			processMessage(clientId+"u");
-			sendMessage("u");
+			sendMessage(clientId+"u");
 			break;
 		case Input.KEY_DOWN:
 			processMessage(clientId+"d");
-			sendMessage("d");
+			sendMessage(clientId+"d");
 			break;
 		case Input.KEY_Q:
 			processMessage("q");
-			sendMessage("q");
+			sendMessage(clientId+"q");
 			break;
 		case Input.KEY_F2:
 			processMessage("reset");
-			sendMessage("reset");
+			sendMessage(clientId+"reset");
 		}
 	}
 
@@ -82,7 +82,7 @@ public class InputListener implements KeyListener{
 		case Input.KEY_UP:
 		case Input.KEY_DOWN:
 			processMessage(clientId+"s");
-			sendMessage("s");
+			sendMessage(clientId+"s");
 			break;
 		}
 	}
@@ -98,8 +98,7 @@ public class InputListener implements KeyListener{
 	}
 	
 	public void sendMessage(String message){
-		//TODO client ID should not be prepended here
-		out.println(clientId+message);
+		out.println(message);
 	}
 
 	public void setClientId(String clientId) {

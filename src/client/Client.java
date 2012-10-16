@@ -43,7 +43,6 @@ public class Client extends BasicGame{
 		this.platformSpeedL = platformSpeedL;
 		this.platformSpeedR = platformSpeedR;
 		resetGame();
-		score = 10000;
 		gamestate = GAME;
 	}
 	
@@ -51,6 +50,7 @@ public class Client extends BasicGame{
 		platform = new Platform(windowWidth, windowHeight, platformSpeedL, platformSpeedR);
 		ball = new Ball(platform);
 		obstacles = new ArrayList<Obstacle>();
+		score = 10000;
 		gamestate = GAME;
 	}
 
@@ -61,7 +61,7 @@ public class Client extends BasicGame{
 		for (Obstacle o : obstacles){
 			o.render(g);
 		}
-		g.drawString("Score: " + score, 10f, 20f);
+		g.drawString("Score: " + (score/10), 10f, 20f);
 		if (gamestate == WIN){
 			g.drawString("Congratulations!", 10f, 30f);
 		}else if (gamestate == LOSE){
@@ -72,7 +72,6 @@ public class Client extends BasicGame{
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		container.getInput().addKeyListener(inputListener);
-		//TODO client should not start until signal is given from server
 	}
 
 	@Override
@@ -83,11 +82,13 @@ public class Client extends BasicGame{
 		if (gamestate == GAME){
 			platform.move();
 			ball.move();
-		
+			score -= 1;
 			if (ball.getCenterY() - ball.getRadius() <= 0){
 				gamestate = WIN;
+				inputListener.sendMessage(inputListener.clientId + "win");
 			}else if (ball.getCenterY() + ball.getRadius() >= windowHeight){
 				gamestate = LOSE;
+				inputListener.sendMessage(inputListener.clientId + "lose");
 			}
 		}
 		if(gamestate == GAME){
@@ -95,17 +96,16 @@ public class Client extends BasicGame{
 				o.move();
 				if (o.intersects(ball)){
 					gamestate = LOSE;
+					inputListener.sendMessage(inputListener.clientId + "lose");
 					break;
 				}
 			}
 		}
 		if (quit) container.exit();
-		//TODO communicate gamestate to the other player
 		//TODO besides gamestate, should send something else?
 	}
 	
 	private void processMessage(String message){
-		System.out.println("Process: " + message);
 		if (message.matches(".*q") || message == null){
 			quit = true;
 			return;
@@ -136,6 +136,14 @@ public class Client extends BasicGame{
 		}
 		if (message.matches(".*reset")){
 			resetGame();
+			return;
+		}
+		if (message.matches(".*win")){
+			gamestate = WIN;
+			return;
+		}
+		if (message.matches(".*lose")){
+			gamestate = LOSE;
 			return;
 		}
 		System.err.println("Can't understand message: " + message);

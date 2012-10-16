@@ -14,13 +14,11 @@ public class InputListener implements KeyListener{
 	
 	private Socket socket = null;
 	private PrintWriter out = null;
-	private String host = "localhost";
-	private int port = 4444;
 	private DataReceiver dataReceiver;
-	private String clientId = null;
+	public String clientId = null;
 	private boolean acceptingInput;
 
-	public InputListener(MessageQueue messages){
+	public InputListener( MessageQueue messages, String host, int port){
 		this.messages = messages;
 		
 		try {

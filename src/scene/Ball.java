@@ -7,23 +7,22 @@ import org.newdawn.slick.geom.Circle;
 public class Ball extends Circle{
 	
 	private static final long serialVersionUID = 1L;
-	public static final int IN_GAME = 1;
-	public static final int FREE_FALL = 0;
-	public static final int DEAD = -1;
+	public static final int GAME = 0;
+	public static final int FREE_FALL = 1;
 	private Platform platform;
 	private float speed;
 	private int state;
 	
 	public Ball(Platform platform){
-		super(platform.getCenterX(), platform.getCenterY(), 
+		super(platform.getCenterX(), platform.getCenterY() - (platform.getX2()-platform.getX1()) / 10.0f, 
 				(platform.getX2()-platform.getX1()) / 10.0f);
 		this.platform = platform;
 		speed = 0f;
-		state = IN_GAME;
+		state = GAME;
 	}
 
 	public void move(){
-		if (state == IN_GAME){
+		if (state == GAME){
 			float x1, x2, y1, y2;
 			x1 = platform.getX1(); y1 = platform.getY1();
 			x2 = platform.getX2(); y2 = platform.getY2();
@@ -42,17 +41,12 @@ public class Ball extends Circle{
 			float x3 = getCenterX() - x1;
 			float y3 = (float) (x3 * Math.tan(Math.asin(dy/h))) + y1 - radius;
 			setCenterY(y3);
-		}else if(state == FREE_FALL){
+		}else{
 			setCenterY(getCenterY() + speed);
 		}
 		
 	}
 	
-	public void die(){
-		//TODO check if this state is really needed by the game
-		state = DEAD;
-	}
-
 	public void render(Graphics g){
 		g.draw(this);
 	}

@@ -51,6 +51,7 @@ public class Client extends BasicGame{
 		platform = new Platform(windowWidth, windowHeight, platformSpeedL, platformSpeedR);
 		ball = new Ball(platform);
 		obstacles = new ArrayList<Obstacle>();
+		gamestate = GAME;
 	}
 
 	@Override
@@ -61,6 +62,11 @@ public class Client extends BasicGame{
 			o.render(g);
 		}
 		g.drawString("Score: " + score, 10f, 20f);
+		if (gamestate == WIN){
+			g.drawString("Congratulations!", 10f, 30f);
+		}else if (gamestate == LOSE){
+			g.drawString("Game Over", 10f, 30f);
+		}
 	}
 
 	@Override
@@ -71,22 +77,26 @@ public class Client extends BasicGame{
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
-		//TODO filter game events according to gamestate
 		if (!messages.isEmpty()){
 			processMessage(messages.getMessage());
 		}
+		if (gamestate == GAME){
+			platform.move();
+			ball.move();
 		
-		platform.move();
-		ball.move();
-		if (ball.getCenterY() - ball.getRadius() <= 0){
-			gamestate = WIN;
-		}else if (ball.getCenterY() + ball.getRadius() >= windowHeight){
-			gamestate = LOSE;
-		}
-		for (Obstacle o : obstacles) {
-			o.move();
-			if (o.intersects(ball)){
+			if (ball.getCenterY() - ball.getRadius() <= 0){
+				gamestate = WIN;
+			}else if (ball.getCenterY() + ball.getRadius() >= windowHeight){
 				gamestate = LOSE;
+			}
+		}
+		if(gamestate == GAME){
+			for (Obstacle o : obstacles) {
+				o.move();
+				if (o.intersects(ball)){
+					gamestate = LOSE;
+					break;
+				}
 			}
 		}
 		if (quit) container.exit();

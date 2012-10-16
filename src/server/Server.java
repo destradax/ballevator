@@ -132,7 +132,10 @@ public class Server {
 		int players = Integer.parseInt(args[5]);
 		
 		//TODO check what is the minimum window size required to display everything properly
-		//TODO validate that window dimensions are greater than the minimum
+		if (width < 100 || height < 100){
+			System.out.println("Width and height should both be greater than 100");
+			System.exit(1);
+		}
 		
 		System.out.println("Window Width: " + width);
 		System.out.println("Platform Height: " + height);

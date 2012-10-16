@@ -15,6 +15,10 @@ import scene.Platform;
 
 public class Client extends BasicGame{
 	
+	private static final int GAME = 0;
+	private static final int WIN = 1;
+	private static final int LOSE = -1;
+	
 	private MessageQueue messages;
 	private boolean quit = false;
 	private InputListener inputListener;
@@ -27,6 +31,7 @@ public class Client extends BasicGame{
 	private float platformSpeedL, platformSpeedR;
 	
 	private int score;
+	private int gamestate;
 	
 	public Client(InputListener inputListener, MessageQueue messages, 
 			int windowWidth, int windowHeight, float platformSpeedL, float platformSpeedR) {
@@ -39,6 +44,7 @@ public class Client extends BasicGame{
 		this.platformSpeedR = platformSpeedR;
 		resetGame();
 		score = 10000;
+		gamestate = GAME;
 	}
 	
 	private void resetGame(){
@@ -65,20 +71,27 @@ public class Client extends BasicGame{
 
 	@Override
 	public void update(GameContainer container, int delta) throws SlickException {
+		//TODO filter game events according to gamestate
 		if (!messages.isEmpty()){
 			processMessage(messages.getMessage());
 		}
 		
 		platform.move();
 		ball.move();
-		//TODO check ball state and set game state accordingly
+		if (ball.getCenterY() - ball.getRadius() <= 0){
+			gamestate = WIN;
+		}else if (ball.getCenterY() + ball.getRadius() >= windowHeight){
+			gamestate = LOSE;
+		}
 		for (Obstacle o : obstacles) {
 			o.move();
 			if (o.intersects(ball)){
-				//TODO set game state to GAME OVER
+				gamestate = LOSE;
 			}
 		}
 		if (quit) container.exit();
+		//TODO communicate gamestate to the other player
+		//TODO besides gamestate, should send something else?
 	}
 	
 	private void processMessage(String message){
